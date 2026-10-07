@@ -37,6 +37,7 @@ __all__ = [
 logger = logging.getLogger(__name__)
 
 DEFINITIVE_STATUS = frozenset({200, 400, 404})
+USER_AGENT = "leads-cnpj/0.1 (+https://github.com/caiolucasxz55/CRM-leads-cleaning)"
 
 
 class CnpjLookupError(Exception):
@@ -84,7 +85,7 @@ class BrasilApiProvider:
         self._http = http or httpx.Client(
             base_url=self.BASE_URL,
             timeout=httpx.Timeout(15.0),
-            headers={"User-Agent": "leads-cnpj/0.1 (+https://github.com/caiolucasxz55/CRM-leads-cleaning)"},
+            headers={"User-Agent": USER_AGENT},
         )
         self._retry = retry or RetryPolicy()
         self._min_interval = min_interval
