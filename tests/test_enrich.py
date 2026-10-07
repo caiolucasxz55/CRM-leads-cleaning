@@ -19,43 +19,9 @@ from leads.enrich import (
 )
 from leads.models import Col, LeadStatus
 from tests.conftest import CNPJ_PETROBRAS, load_fixture
-
-CNPJ_SADIA = "20730099000194"  # baixada por incorporação à BRF
-CNPJ_INEXISTENTE = "99999999099970"
+from tests.fakes import CNPJ_INEXISTENTE, CNPJ_SADIA, FakeApi, make_provider
 
 MakeLeads = Callable[[list[dict[str, Any]]], pd.DataFrame]
-
-FIXTURE_ROUTES: dict[str, tuple[int, str]] = {
-    CNPJ_PETROBRAS: (200, "brasilapi_ativa.json"),
-    CNPJ_SADIA: (200, "brasilapi_baixada.json"),
-    CNPJ_INEXISTENTE: (404, "brasilapi_404.json"),
-}
-
-
-class FakeApi:
-    """Servidor falso que responde com as respostas reais salvas em tests/fixtures."""
-
-    def __init__(self, scripted: list[httpx.Response] | None = None) -> None:
-        self.calls: list[str] = []
-        self._scripted = list(scripted or [])
-
-    def __call__(self, request: httpx.Request) -> httpx.Response:
-        cnpj = request.url.path.rsplit("/", 1)[-1]
-        self.calls.append(cnpj)
-        if self._scripted:
-            return self._scripted.pop(0)
-        if cnpj in FIXTURE_ROUTES:
-            status, fixture = FIXTURE_ROUTES[cnpj]
-            return httpx.Response(status, json=load_fixture(fixture))
-        return httpx.Response(400, json=load_fixture("brasilapi_400.json"))
-
-
-def make_provider(
-    api: FakeApi, sleeps: list[float] | None = None, **kwargs: Any
-) -> BrasilApiProvider:
-    http = httpx.Client(transport=httpx.MockTransport(api), base_url=BrasilApiProvider.BASE_URL)
-    recorder = sleeps if sleeps is not None else []
-    return BrasilApiProvider(http, sleep=recorder.append, **kwargs)
 
 
 class TestBrasilApiProvider:
