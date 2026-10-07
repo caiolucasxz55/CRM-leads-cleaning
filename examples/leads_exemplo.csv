@@ -1,0 +1,31 @@
+Nome do Contato;Empresa;CNPJ;E-mail;Telefone;Origem;Vendedor
+Ana Lima;Petrobras;33.000.167/0001-01;Ana.Lima@Example.com;(21) 99000-0001;Feira;Marcos
+Bruno Costa;PETROBRAS;33000167000101;bruno.costa@example.com;21 99000-0002;Site;Julia
+Carla Souza;Banco do Brasil;191;carla.souza@example.com;61 99000-0003;Indicação;Marcos
+Diego Alves;Magazine Luiza;47.960.950/0001-21;diego.alves@example.com;+55 16 99000-0004;Site;Julia
+Elisa Rocha;Magalu;47960950000121;;16990000004;LinkedIn;Marcos
+Fábio Nunes;Itaú Unibanco;60.701.190/0001-04;fabio.nunes@example;(11) 99000-0006;Site;Julia
+Gabriela Martins;Ambev;07.526.557/0001-00;gabriela.martins@example.com;11 3000-0007;Feira;Marcos
+Hugo Pereira;Sadia;20.730.099/0001-94;hugo.pereira@example.com;(49) 99000-0008;Lista comprada;Julia
+Isabela Ramos;Unibanco;33.700.394/0001-40;isabela.ramos@example.com;(11) 99000-0009;Lista comprada;Marcos
+João Mendes;Banco Real;33.066.408/0001-15;joao.mendes@example.com;11 99000-0010;Lista comprada;Julia
+Karina Dias;Tele Norte Leste;02.558.134/0001-58;karina.dias@example.com;21 99000-0011;Lista comprada;Marcos
+Lucas Freitas;BRF;01.838.723/0001-27;lucas.freitas@example.com;11 99000-0012;Site;Julia
+Mariana Teixeira;Vale;33.592.510/0001-54;mariana.teixeira@example.com;21 99000-0013;Evento;Marcos
+Nicolas Barros;Embraer;07.689.002/0001-89;nicolas.barros@example.com;12 99000-0014;Evento;Julia
+Olívia Cardoso;Natura;71.673.990/0001-77;olivia.cardoso@example.com;11 99000-0015;Site;Marcos
+Paulo Moreira;WEG;84.429.695/0001-11;paulo.moreira@example.com;47 99000-0016;Indicação;Julia
+Paulo Moreira;WEG S.A.;;PAULO.MOREIRA@example.com ;;Site;Marcos
+Quésia Pinto;Localiza;16.670.085/0001-55;quesia.pinto@example.com;31 99000-0018;LinkedIn;Julia
+Rafael Gomes;Totvs;53.113.791/0001-22;rafael.gomes@example.com;11 99000-0019;Site;Marcos
+Sofia Araújo;Itaúsa;61.532.644/0001-15;sofia.araujo@example.com;11 99000-0020;Evento;Julia
+Tiago Lopes;Petrobras;33.000.167/0001-10;tiago.lopes@example.com;21 99000-0021;Feira;Marcos
+Úrsula Fernandes;Vale;33592510000145;ursula.fernandes@example.com;21 99000-0022;Site;Julia
+Vitor Melo;Loja do Vitor;;vitor.melo@example.com;(11) 99000-0023;Instagram;Marcos
+Vitor Melo;Loja do Vitor;;;11990000023;WhatsApp;Julia
+Wesley Castro;Empresa Fantasma;99.999.999/0999-70;wesley.castro@example.com;11 99000-0025;Lista comprada;Marcos
+Yara Batista;Ambev;7526557000100;yara.batista@example.com;11 3000-0026;Site;Julia
+Zeca Ribeiro;Natura;71.673.990/0001-77;zeca.ribeiro@example.com;9900-0027;Feira;Marcos
+Alice Monteiro;Sadia;20730099000194;alice.monteiro@example.com;49 99000-0028;Site;Julia
+Bernardo Silva;Vale;33.592.510/0001-54;bernardo.silva@example.com;21 99000-0029;Evento;Marcos
+Camila Torres;Padaria Pão Quente;;camila.torres@example.com;não tem;Instagram;Julia
