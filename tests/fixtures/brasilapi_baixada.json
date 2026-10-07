@@ -1,0 +1,82 @@
+{
+  "uf": "SC",
+  "cep": "89700001",
+  "cnpj": "20730099000194",
+  "pais": null,
+  "email": null,
+  "porte": "DEMAIS",
+  "bairro": "CENTRO",
+  "numero": "86",
+  "ddd_fax": "494443369",
+  "municipio": "CONCORDIA",
+  "logradouro": "SENADOR ATTILIO FONTANA",
+  "cnae_fiscal": 1012103,
+  "codigo_pais": null,
+  "complemento": "",
+  "codigo_porte": 5,
+  "razao_social": "SADIA S.A.",
+  "nome_fantasia": "",
+  "capital_social": 2000000000,
+  "ddd_telefone_1": "494443000",
+  "ddd_telefone_2": "",
+  "opcao_pelo_mei": null,
+  "codigo_municipio": 8083,
+  "cnaes_secundarios": [
+    {
+      "codigo": 1012101,
+      "descricao": "Abate de aves"
+    },
+    {
+      "codigo": 1013901,
+      "descricao": "Fabricação de produtos de carne"
+    },
+    {
+      "codigo": 1013902,
+      "descricao": "Preparação de subprodutos do abate"
+    },
+    {
+      "codigo": 1066000,
+      "descricao": "Fabricação de alimentos para animais"
+    },
+    {
+      "codigo": 155502,
+      "descricao": "Produção de pintos de um dia"
+    },
+    {
+      "codigo": 155505,
+      "descricao": "Produção de ovos"
+    },
+    {
+      "codigo": 210107,
+      "descricao": "Extração de madeira em florestas plantadas"
+    },
+    {
+      "codigo": 4639701,
+      "descricao": "Comércio atacadista de produtos alimentícios em geral"
+    }
+  ],
+  "natureza_juridica": "Sociedade Anônima Fechada",
+  "regime_tributario": [],
+  "situacao_especial": "",
+  "opcao_pelo_simples": null,
+  "situacao_cadastral": 8,
+  "data_opcao_pelo_mei": null,
+  "data_exclusao_do_mei": null,
+  "cnae_fiscal_descricao": "Frigorífico - abate de suínos",
+  "codigo_municipio_ibge": 4204301,
+  "data_inicio_atividade": "1979-05-23",
+  "data_situacao_especial": null,
+  "data_opcao_pelo_simples": null,
+  "data_situacao_cadastral": "2012-12-31",
+  "nome_cidade_no_exterior": "",
+  "codigo_natureza_juridica": 2054,
+  "data_exclusao_do_simples": null,
+  "motivo_situacao_cadastral": 2,
+  "ente_federativo_responsavel": "",
+  "identificador_matriz_filial": 1,
+  "qualificacao_do_responsavel": 10,
+  "descricao_situacao_cadastral": "BAIXADA",
+  "descricao_tipo_de_logradouro": "RUA",
+  "descricao_motivo_situacao_cadastral": "INCORPORACAO",
+  "descricao_identificador_matriz_filial": "MATRIZ"
+}

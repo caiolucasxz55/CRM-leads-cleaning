@@ -1,0 +1,5 @@
+{
+  "message": "CNPJ 33.000.167/0001-02 inválido.",
+  "type": "bad_request",
+  "name": "BadRequestError"
+}

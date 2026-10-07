@@ -65,6 +65,7 @@ class CompanyData:
     cidade: str | None
     uf: str | None
     situacao_cadastral: str | None
+    motivo_situacao: str | None = None
 
     @property
     def ativa(self) -> bool:

@@ -1,0 +1,5 @@
+{
+  "message": "CNPJ 99.999.999/0999-70 não encontrado.",
+  "type": "not_found",
+  "name": "NotFoundError"
+}
