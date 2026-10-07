@@ -23,10 +23,10 @@ class RetryExhaustedError(Exception):
 class RetryPolicy:
     """Espera exponencial: ``base_delay * factor ** (tentativa - 1)``, limitada a ``max_delay``."""
 
-    max_attempts: int = 4
-    base_delay: float = 1.0
+    max_attempts: int = 5
+    base_delay: float = 2.0
     factor: float = 2.0
-    max_delay: float = 30.0
+    max_delay: float = 60.0
 
     def delay(self, attempt: int, retry_after: float | None = None) -> float:
         if retry_after is not None:

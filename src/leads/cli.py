@@ -102,8 +102,12 @@ def run(
     ] = False,
     intervalo: Annotated[
         float,
-        typer.Option("--intervalo", min=0.0, help="Segundos mínimos entre consultas à API."),
-    ] = 0.0,
+        typer.Option(
+            "--intervalo",
+            min=0.0,
+            help="Segundos mínimos entre consultas à API (a BrasilAPI limita rajadas).",
+        ),
+    ] = 0.5,
     hubspot: Annotated[
         bool,
         typer.Option("--hubspot", help="Envia os leads ok para o HubSpot como empresas."),

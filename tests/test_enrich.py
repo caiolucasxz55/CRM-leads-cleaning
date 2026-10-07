@@ -140,7 +140,7 @@ class TestCnpjEnricher:
         assert len(api.calls) == 1
 
     def test_erro_nao_e_cacheado(self) -> None:
-        api = FakeApi([httpx.Response(500)] * 4)
+        api = FakeApi([httpx.Response(500)] * RetryPolicy().max_attempts)
         cache = CnpjCache()
         enricher = CnpjEnricher(make_provider(api), cache)
 
@@ -177,7 +177,9 @@ class TestEnrichLeads:
 
     def test_erro_na_api_vira_erro_consulta(self, make_leads: MakeLeads) -> None:
         df = make_leads([{"cnpj": CNPJ_PETROBRAS, "nome": "Ana"}])
-        enricher = CnpjEnricher(make_provider(FakeApi([httpx.Response(503)] * 4)))
+        enricher = CnpjEnricher(
+            make_provider(FakeApi([httpx.Response(503)] * RetryPolicy().max_attempts))
+        )
 
         out = enrich_leads(df, enricher)
 
