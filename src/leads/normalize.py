@@ -10,6 +10,9 @@ import re
 
 import pandas as pd
 
+from leads.frame import CNPJ_KEY, append_detail
+from leads.models import Col, LeadStatus
+
 # Pesos oficiais do cálculo do dígito verificador do CNPJ.
 _CNPJ_WEIGHTS_DV1 = (5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2)
 _CNPJ_WEIGHTS_DV2 = (6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2)
@@ -154,3 +157,54 @@ def normalize_phone(value: object) -> str | None:
     if len(subscriber) == 8 and subscriber[0] in "01":
         return None
     return f"+{_COUNTRY_CODE}{digits}"
+
+
+# ---------------------------------------------------------------------------
+# DataFrame
+# ---------------------------------------------------------------------------
+
+
+def _valid_cnpj_key(value: object) -> str | None:
+    cnpj = clean_cnpj(value)
+    return cnpj if cnpj is not None and is_valid_cnpj(cnpj) else None
+
+
+def normalize_leads(df: pd.DataFrame) -> pd.DataFrame:
+    """Normaliza as colunas canônicas e marca ``cnpj_invalido``.
+
+    Devolve uma cópia com:
+
+    * ``cnpj`` formatado quando válido (o valor original é mantido quando inválido);
+    * ``_cnpj`` com os 14 caracteres do CNPJ válido, usado nas etapas seguintes;
+    * ``email`` e ``telefone`` padronizados (vazios quando inválidos, com o valor
+      original anotado em ``detalhe``);
+    * ``status`` preenchido apenas para os CNPJs inválidos.
+    """
+    out = df.copy()
+    out[Col.STATUS] = None
+    out[Col.DETALHE] = ""
+    out[Col.DUPLICADO_DE] = None
+
+    for column in out.columns.drop([Col.LINHA, Col.STATUS, Col.DETALHE, Col.DUPLICADO_DE]):
+        out[column] = out[column].map(to_text).astype(object)
+
+    raw_cnpj = out[Col.CNPJ]
+    out[CNPJ_KEY] = raw_cnpj.map(_valid_cnpj_key).astype(object)
+    has_key = out[CNPJ_KEY].notna()
+    out.loc[has_key, Col.CNPJ] = out.loc[has_key, CNPJ_KEY].map(format_cnpj)
+
+    invalid_cnpj = raw_cnpj.notna() & ~has_key
+    out.loc[invalid_cnpj, Col.STATUS] = LeadStatus.CNPJ_INVALIDO.value
+    append_detail(out, invalid_cnpj, "CNPJ com formato ou dígito verificador inválido")
+
+    for column, normalizer, label in (
+        (Col.EMAIL, normalize_email, "e-mail"),
+        (Col.TELEFONE, normalize_phone, "telefone"),
+    ):
+        raw = out[column]
+        normalized = raw.map(normalizer).astype(object)
+        rejected = raw.notna() & normalized.isna()
+        append_detail(out, rejected, f"{label} inválido descartado: " + raw.astype(str))
+        out[column] = normalized
+
+    return out
