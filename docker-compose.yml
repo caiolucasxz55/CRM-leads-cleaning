@@ -1,0 +1,30 @@
+services:
+  # Processa a planilha de exemplo:
+  #   docker compose run --rm leads
+  # Outra planilha (colocada em ./examples):
+  #   docker compose run --rm leads run minha_planilha.xlsx -o saida/limpo.xlsx
+  leads:
+    build:
+      context: .
+      target: runtime
+    image: leads-cnpj:latest
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./examples:/data
+    command:
+      - run
+      - leads_exemplo.csv
+      - --saida
+      - saida/leads_exemplo_limpo.xlsx
+      - --relatorio
+      - saida/relatorio.md
+
+  # Lint, tipagem e testes dentro do container:
+  #   docker compose run --rm tests
+  tests:
+    build:
+      context: .
+      target: test
+    image: leads-cnpj:test
