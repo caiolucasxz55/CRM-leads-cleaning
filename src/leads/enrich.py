@@ -11,7 +11,6 @@ import logging
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
-from email.utils import parsedate_to_datetime
 from enum import Enum
 from typing import Any, Protocol
 
@@ -20,11 +19,23 @@ import pandas as pd
 
 from leads.cache import CnpjCache
 from leads.frame import CNPJ_KEY, append_detail
+from leads.http import RetryExhaustedError, RetryPolicy, send_with_retry
 from leads.models import ENRICHMENT_COLUMNS, Col, CompanyData, LeadStatus
+
+__all__ = [
+    "BrasilApiProvider",
+    "CnpjEnricher",
+    "CnpjLookupError",
+    "CnpjProvider",
+    "LookupOutcome",
+    "LookupResult",
+    "RetryPolicy",
+    "enrich_leads",
+    "format_cnae",
+]
 
 logger = logging.getLogger(__name__)
 
-RETRYABLE_STATUS = frozenset({408, 425, 429, 500, 502, 503, 504})
 DEFINITIVE_STATUS = frozenset({200, 400, 404})
 
 
@@ -48,39 +59,6 @@ class CnpjProvider(Protocol):
         ...
 
     def parse(self, cnpj: str, payload: dict[str, Any]) -> CompanyData: ...
-
-
-# ---------------------------------------------------------------------------
-# Retry
-# ---------------------------------------------------------------------------
-
-
-@dataclass(frozen=True, slots=True)
-class RetryPolicy:
-    """Espera exponencial: ``base_delay * factor ** (tentativa - 1)``, limitada a ``max_delay``."""
-
-    max_attempts: int = 4
-    base_delay: float = 1.0
-    factor: float = 2.0
-    max_delay: float = 30.0
-
-    def delay(self, attempt: int, retry_after: float | None = None) -> float:
-        if retry_after is not None:
-            return min(max(retry_after, 0.0), self.max_delay)
-        return min(self.base_delay * self.factor ** (attempt - 1), self.max_delay)
-
-
-def _parse_retry_after(value: str | None) -> float | None:
-    if not value:
-        return None
-    try:
-        return float(value)
-    except ValueError:
-        pass
-    try:
-        return parsedate_to_datetime(value).timestamp() - time.time()
-    except (TypeError, ValueError):
-        return None
 
 
 # ---------------------------------------------------------------------------
@@ -118,34 +96,18 @@ class BrasilApiProvider:
         self._http.close()
 
     def fetch(self, cnpj: str) -> ApiResponse:
-        last_error = "erro desconhecido"
-        for attempt in range(1, self._retry.max_attempts + 1):
-            retry_after: float | None = None
-            try:
-                response = self._request(cnpj)
-            except httpx.TransportError as exc:
-                last_error = f"falha de rede: {exc.__class__.__name__}"
-            else:
-                if response.status_code in DEFINITIVE_STATUS:
-                    return ApiResponse(response.status_code, _json_or_empty(response))
-                if response.status_code not in RETRYABLE_STATUS:
-                    raise CnpjLookupError(
-                        f"resposta inesperada da API: HTTP {response.status_code}"
-                    )
-                last_error = f"HTTP {response.status_code}"
-                retry_after = _parse_retry_after(response.headers.get("Retry-After"))
-
-            if attempt < self._retry.max_attempts:
-                wait = self._retry.delay(attempt, retry_after)
-                logger.warning(
-                    "Consulta do CNPJ %s falhou (%s), nova tentativa em %.1fs",
-                    cnpj,
-                    last_error,
-                    wait,
-                )
-                self._sleep(wait)
-
-        raise CnpjLookupError(f"{last_error} após {self._retry.max_attempts} tentativas")
+        try:
+            response = send_with_retry(
+                lambda: self._request(cnpj),
+                policy=self._retry,
+                sleep=self._sleep,
+                description=f"Consulta do CNPJ {cnpj}",
+            )
+        except RetryExhaustedError as exc:
+            raise CnpjLookupError(str(exc)) from exc
+        if response.status_code not in DEFINITIVE_STATUS:
+            raise CnpjLookupError(f"resposta inesperada da API: HTTP {response.status_code}")
+        return ApiResponse(response.status_code, _json_or_empty(response))
 
     def _request(self, cnpj: str) -> httpx.Response:
         if self._min_interval and self._last_request is not None:
