@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Build / distribuição
+build/
+dist/
+*.egg-info/
+.eggs/
+wheels/
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+ENV/
+
+# Testes e cobertura
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.tox/
+.nox/
+
+# Ferramentas de qualidade
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+
+# Segredos e configuração local
+.env
+.env.*
+!.env.example
+
+# Cache das consultas de CNPJ e saídas geradas
+.cache/
+*.sqlite
+*.sqlite3
+*.db
+output/
+saida/
+
+# Planilhas geradas (os exemplos versionados ficam em examples/)
+*.xlsx
+*.xls
+!examples/*.xlsx
+~$*.xlsx
+
+# IDEs e sistema operacional
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
