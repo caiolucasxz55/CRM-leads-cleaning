@@ -84,7 +84,7 @@ class BrasilApiProvider:
         self._http = http or httpx.Client(
             base_url=self.BASE_URL,
             timeout=httpx.Timeout(15.0),
-            headers={"User-Agent": "leads-cnpj/0.1 (+https://github.com/caiolucasxz55)"},
+            headers={"User-Agent": "leads-cnpj/0.1 (+https://github.com/caiolucasxz55/CRM-leads-cleaning)"},
         )
         self._retry = retry or RetryPolicy()
         self._min_interval = min_interval
